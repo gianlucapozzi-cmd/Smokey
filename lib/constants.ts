@@ -37,13 +37,13 @@ export const STORE_DETAILS = [
   {
     id: "spinetoli",
     city: "Spinetoli (AP)",
-    address: "Via Salaria 57/a, Pagliare del Tronto",
+    address: "Via salaria 57/a Pagliare del Tronto",
     cap: "63078",
   },
   {
     id: "porto-san-giorgio",
     city: "Porto San Giorgio (FM)",
-    address: "Via Giuseppe Mazzini, 79",
+    address: "Via Giuseppe Mazzini 79",
     cap: "63822",
   },
 ] as const;

@@ -7,7 +7,6 @@ import {
   PRIVACY_CONSENT_TEXT,
   PRIVACY_POLICY_URL,
   PRODUCT_INTERESTS,
-  STORES,
   type ProductInterestId,
 } from "@/lib/constants";
 import type { CommunityPayload, RatingValue } from "@/lib/types";
@@ -19,6 +18,7 @@ import {
 } from "@/lib/validation";
 import { FadeIn } from "./FadeIn";
 import { RatingScale } from "./RatingScale";
+import { StoreCenters } from "./StoreCenters";
 
 const INITIAL: FormDraft = {
   firstName: "",
@@ -216,7 +216,7 @@ export function CommunityForm() {
                   entrambe ti raggiungiamo anche per le promo.
                 </p>
 
-                <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                <div className="mt-4">
                   <Field
                     label="Data di nascita"
                     type="date"
@@ -225,33 +225,21 @@ export function CommunityForm() {
                     error={underage ? undefined : show("birthDate")}
                     onChange={(value) => update("birthDate", value)}
                   />
-                  <label className="block">
-                    <span className="mb-1.5 block text-sm font-medium text-ink">
-                      Negozio di riferimento *
-                    </span>
-                    <select
-                      className="field"
-                      value={draft.store}
-                      aria-invalid={Boolean(show("store"))}
-                      onChange={(event) =>
-                        update(
-                          "store",
-                          event.target.value as FormDraft["store"],
-                        )
-                      }
-                    >
-                      <option value="">Seleziona il negozio</option>
-                      {STORES.map((store) => (
-                        <option key={store.id} value={store.id}>
-                          {store.label}
-                        </option>
-                      ))}
-                    </select>
-                    {show("store") ? (
-                      <p className="mt-1.5 text-sm text-ember">{errors.store}</p>
-                    ) : null}
-                  </label>
                 </div>
+
+                <fieldset className="mt-4">
+                  <legend className="mb-1.5 text-sm font-medium text-ink">
+                    Negozio di riferimento *
+                  </legend>
+                  <StoreCenters
+                    variant="light"
+                    selected={draft.store}
+                    onSelect={(id) => update("store", id)}
+                  />
+                  {show("store") ? (
+                    <p className="mt-1.5 text-sm text-ember">{errors.store}</p>
+                  ) : null}
+                </fieldset>
 
                 {underage ? (
                   <motion.div

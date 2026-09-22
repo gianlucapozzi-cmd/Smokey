@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { StoreCenters } from "./StoreCenters";
 
 export function Hero() {
   return (
@@ -41,22 +42,27 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.12 }}
           className="mt-5 max-w-lg text-base leading-relaxed text-sand/90 sm:text-lg"
         >
-          Il filo diretto con i negozi di{" "}
-          <strong className="font-medium text-cream">Ascoli Piceno</strong>,{" "}
-          <strong className="font-medium text-cream">
-            San Benedetto del Tronto
-          </strong>
-          ,{" "}
-          <strong className="font-medium text-cream">Spinetoli</strong> e{" "}
-          <strong className="font-medium text-cream">Porto San Giorgio</strong>
-          . Per chi passa dal bancone, non per chi naviga a caso.
+          Il filo diretto con i negozi. Per chi passa dal bancone, non per chi
+          naviga a caso.
         </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.16 }}
+          className="mt-8 max-w-md"
+        >
+          <p className="mb-2 text-xs font-medium uppercase tracking-[0.18em] text-sand/55">
+            I nostri centri
+          </p>
+          <StoreCenters variant="dark" />
+        </motion.div>
 
         <motion.p
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.18 }}
-          className="mt-4 max-w-md text-sm leading-relaxed text-sand/70 sm:text-[0.95rem]"
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mt-6 max-w-md text-sm leading-relaxed text-sand/70 sm:text-[0.95rem]"
         >
           Niente spam, niente liste infinite. Solo vantaggi veri: consigli,
           promo e un posto dove dirci come sta andando.
