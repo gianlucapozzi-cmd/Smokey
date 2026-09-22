@@ -19,8 +19,11 @@ export const metadata: Metadata = {
   description:
     "Il filo diretto con i negozi SOSmoke di Ascoli Piceno, San Benedetto del Tronto, Spinetoli e Porto San Giorgio. Consigli, promo e un posto dove dirci la tua.",
   icons: {
-    icon: "/icon.png",
-    apple: "/icon.png",
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/icon.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: "/apple-icon.png",
   },
 };
 
