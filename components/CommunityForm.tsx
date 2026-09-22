@@ -56,10 +56,11 @@ export function CommunityForm() {
     });
   }, [done]);
   function show(key: keyof typeof errors): string | undefined {
-    const hasValue =
-      key === "contact" || key === "privacy"
-        ? touched
-        : Boolean(draft[key as keyof FormDraft]);
+    if (key === "privacy" || key === "interests") {
+      if (!touched) return undefined;
+      return errors[key];
+    }
+    const hasValue = Boolean(draft[key as keyof FormDraft]);
     if (!(touched || hasValue)) return undefined;
     return errors[key];
   }
@@ -201,7 +202,7 @@ export function CommunityForm() {
                     onChange={(value) => update("email", value)}
                   />
                   <Field
-                    label="Cellulare"
+                    label="Cellulare *"
                     type="tel"
                     inputMode="tel"
                     autoComplete="tel"
@@ -210,18 +211,14 @@ export function CommunityForm() {
                     onChange={(value) => update("phone", value)}
                   />
                 </div>
-                {errors.contact && touched ? (
-                  <p className="mt-2 text-sm text-ember">{errors.contact}</p>
-                ) : (
-                  <p className="mt-2 text-sm text-ink/50">
-                    Almeno uno dei due è obbligatorio. Con entrambi ti
-                    raggiungiamo via email e WhatsApp.
-                  </p>
-                )}
+                <p className="mt-2 text-sm text-ink/50">
+                  Il cellulare è obbligatorio. L’email è facoltativa: con
+                  entrambe ti raggiungiamo anche per le promo.
+                </p>
 
                 <div className="mt-4 grid gap-4 sm:grid-cols-2">
                   <Field
-                    label="Data di nascita *"
+                    label="Data di nascita"
                     type="date"
                     autoComplete="bday"
                     value={draft.birthDate}
@@ -271,8 +268,7 @@ export function CommunityForm() {
 
                 <fieldset className="mt-6">
                   <legend className="text-sm font-medium text-ink">
-                    Prodotti di interesse{" "}
-                    <span className="font-normal text-ink/45">(opzionale)</span>
+                    Prodotti di interesse *
                   </legend>
                   <p className="mt-1 text-sm text-ink/50">
                     Così sappiamo cosa farti arrivare per primo.
@@ -297,6 +293,9 @@ export function CommunityForm() {
                       );
                     })}
                   </div>
+                  {show("interests") ? (
+                    <p className="mt-2 text-sm text-ember">{errors.interests}</p>
+                  ) : null}
                 </fieldset>
 
                 <div className="mt-8 border-t border-ink/8 pt-8">

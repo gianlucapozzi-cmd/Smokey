@@ -17,7 +17,7 @@ const fraunces = Fraunces({
 export const metadata: Metadata = {
   title: "Community SOSmoke — Entra nel giro",
   description:
-    "Il filo diretto con i negozi SOSmoke di Ascoli Piceno e San Benedetto del Tronto. Consigli, promo e un posto dove dirci la tua.",
+    "Il filo diretto con i negozi SOSmoke di Ascoli Piceno, San Benedetto del Tronto, Spinetoli e Porto San Giorgio. Consigli, promo e un posto dove dirci la tua.",
   icons: {
     icon: "/icon.png",
     apple: "/icon.png",

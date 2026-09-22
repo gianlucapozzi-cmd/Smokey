@@ -32,11 +32,6 @@ export function ageFromIsoDate(iso: string, now = new Date()): number | null {
   return age;
 }
 
-export function isAtLeast18(iso: string): boolean {
-  const age = ageFromIsoDate(iso);
-  return age !== null && age >= 18;
-}
-
 export function isUnder18(iso: string): boolean {
   const age = ageFromIsoDate(iso);
   return age !== null && age < 18;
@@ -80,11 +75,11 @@ export type FieldErrors = Partial<
   Record<
     | "firstName"
     | "lastName"
-    | "contact"
     | "email"
     | "phone"
     | "birthDate"
     | "store"
+    | "interests"
     | "privacy",
     string
   >
@@ -102,30 +97,32 @@ export function validateDraft(draft: FormDraft): FieldErrors {
 
   const email = draft.email.trim();
   const phone = draft.phone.trim();
-  const emailOk = email.length > 0 && isValidEmail(email);
-  const phoneOk = phone.length > 0 && isValidPhone(phone);
 
-  if (!email && !phone) {
-    errors.contact = "Lascia almeno email o cellulare — ancora meglio tutti e due.";
-  } else {
-    if (email && !emailOk) errors.email = "Controlla l'indirizzo email.";
-    if (phone && !phoneOk) errors.phone = "Controlla il numero di cellulare.";
-    if (!emailOk && !phoneOk) {
-      errors.contact = "Lascia almeno un contatto valido: email o cellulare.";
-    }
+  if (!phone) {
+    errors.phone = "Inserisci il cellulare.";
+  } else if (!isValidPhone(phone)) {
+    errors.phone = "Controlla il numero di cellulare.";
   }
 
-  if (!draft.birthDate) {
-    errors.birthDate = "Inserisci la data di nascita.";
-  } else if (ageFromIsoDate(draft.birthDate) === null) {
-    errors.birthDate = "La data non sembra corretta.";
-  } else if (isUnder18(draft.birthDate)) {
-    errors.birthDate =
-      "Questa community è riservata ai maggiorenni. Se hai meno di 18 anni non possiamo registrarti.";
+  if (email && !isValidEmail(email)) {
+    errors.email = "Controlla l'indirizzo email.";
+  }
+
+  if (draft.birthDate) {
+    if (ageFromIsoDate(draft.birthDate) === null) {
+      errors.birthDate = "La data non sembra corretta.";
+    } else if (isUnder18(draft.birthDate)) {
+      errors.birthDate =
+        "Questa community è riservata ai maggiorenni. Se hai meno di 18 anni non possiamo registrarti.";
+    }
   }
 
   if (!draft.store) {
     errors.store = "Scegli il negozio di riferimento.";
+  }
+
+  if (draft.interests.length === 0) {
+    errors.interests = "Scegli almeno un prodotto di interesse.";
   }
 
   if (!draft.privacy) {
@@ -182,17 +179,19 @@ export function parsePayload(input: unknown): CommunityPayload | { error: string
   if (!isNonEmptyName(firstName) || !isNonEmptyName(lastName)) {
     return { error: "Nome e cognome sono obbligatori." };
   }
-  if (!email && !phone) {
-    return { error: "Serve almeno un contatto: email o cellulare." };
+  if (!phone || !isValidPhone(phone)) {
+    return { error: "Il cellulare è obbligatorio." };
   }
   if (email && !isValidEmail(email)) {
     return { error: "Email non valida." };
   }
-  if (phone && !isValidPhone(phone)) {
-    return { error: "Cellulare non valido." };
-  }
-  if (!isAtLeast18(birthDate)) {
-    return { error: "Registrazione consentita solo ai maggiorenni." };
+  if (birthDate) {
+    if (ageFromIsoDate(birthDate) === null) {
+      return { error: "La data di nascita non è valida." };
+    }
+    if (isUnder18(birthDate)) {
+      return { error: "Registrazione consentita solo ai maggiorenni." };
+    }
   }
   if (!isStoreId(store)) {
     return { error: "Seleziona un negozio di riferimento." };
@@ -204,6 +203,9 @@ export function parsePayload(input: unknown): CommunityPayload | { error: string
   const interests = Array.isArray(body.interests)
     ? body.interests.filter(isInterestId)
     : [];
+  if (interests.length === 0) {
+    return { error: "Seleziona almeno un prodotto di interesse." };
+  }
 
   const now = new Date().toISOString();
 

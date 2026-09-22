@@ -8,7 +8,9 @@ export const MARKETING_CONSENT_TEXT =
 
 export const STORES = [
   { id: "ascoli-piceno", label: "Ascoli Piceno" },
-  { id: "san-benedetto", label: "San Benedetto del Tronto" },
+  { id: "san-benedetto", label: "San Benedetto del Tronto (AP)" },
+  { id: "spinetoli", label: "Spinetoli (AP)" },
+  { id: "porto-san-giorgio", label: "Porto San Giorgio (FM)" },
 ] as const;
 
 export const PRODUCT_INTERESTS = [
@@ -28,9 +30,21 @@ export const STORE_DETAILS = [
   },
   {
     id: "san-benedetto",
-    city: "San Benedetto del Tronto",
+    city: "San Benedetto del Tronto (AP)",
     address: "Via Ugo Bassi, 12",
     cap: "63074",
+  },
+  {
+    id: "spinetoli",
+    city: "Spinetoli (AP)",
+    address: "Via Salaria 57/a, Pagliare del Tronto",
+    cap: "63078",
+  },
+  {
+    id: "porto-san-giorgio",
+    city: "Porto San Giorgio (FM)",
+    address: "Via Giuseppe Mazzini, 79",
+    cap: "63822",
   },
 ] as const;
 

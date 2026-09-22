@@ -42,10 +42,13 @@ export function Hero() {
           className="mt-5 max-w-lg text-base leading-relaxed text-sand/90 sm:text-lg"
         >
           Il filo diretto con i negozi di{" "}
-          <strong className="font-medium text-cream">Ascoli Piceno</strong> e{" "}
+          <strong className="font-medium text-cream">Ascoli Piceno</strong>,{" "}
           <strong className="font-medium text-cream">
             San Benedetto del Tronto
           </strong>
+          ,{" "}
+          <strong className="font-medium text-cream">Spinetoli</strong> e{" "}
+          <strong className="font-medium text-cream">Porto San Giorgio</strong>
           . Per chi passa dal bancone, non per chi naviga a caso.
         </motion.p>
 
