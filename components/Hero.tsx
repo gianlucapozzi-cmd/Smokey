@@ -68,14 +68,11 @@ export function Hero() {
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.24 }}
-          className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center"
+          className="mt-8"
         >
           <a href="#form" className="btn-ember w-full justify-center sm:w-auto">
             Dicci la tua
           </a>
-          <p className="text-center text-xs text-sand/55 sm:text-left">
-            Due minuti, dal telefono. Poi ci pensiamo noi.
-          </p>
         </motion.div>
       </div>
     </section>
