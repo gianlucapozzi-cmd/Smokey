@@ -8,15 +8,20 @@ export function Hero() {
     <section className="relative overflow-hidden bg-ink text-cream">
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-24 -top-16 h-72 w-72 rounded-full bg-brand/25 blur-3xl sm:h-[28rem] sm:w-[28rem]"
+        className="pointer-events-none absolute inset-0 z-0 bg-cover bg-center"
+        style={{ backgroundImage: "url(/hero.jpg)", opacity: 0.15 }}
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -bottom-24 left-[-10%] h-56 w-56 rounded-full bg-ember/20 blur-3xl"
+        className="pointer-events-none absolute -right-24 -top-16 z-0 h-72 w-72 rounded-full bg-brand/25 blur-3xl sm:h-[28rem] sm:w-[28rem]"
       />
-      <div className="grain absolute inset-0 opacity-40" />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -bottom-24 left-[-10%] z-0 h-56 w-56 rounded-full bg-ember/20 blur-3xl"
+      />
+      <div className="grain absolute inset-0 z-0 opacity-40" />
 
-      <div className="relative mx-auto max-w-5xl px-5 pb-16 pt-14 sm:px-8 sm:pb-24 sm:pt-20">
+      <div className="relative z-10 mx-auto max-w-5xl px-5 pb-16 pt-14 sm:px-8 sm:pb-24 sm:pt-20">
         <motion.p
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
