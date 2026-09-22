@@ -22,15 +22,6 @@ export function Hero() {
       <div className="grain absolute inset-0 z-0 opacity-40" />
 
       <div className="relative z-10 mx-auto max-w-5xl px-5 pb-16 pt-14 sm:px-8 sm:pb-24 sm:pt-20">
-        <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs tracking-wide text-sand sm:text-sm"
-        >
-          Solo per chi viene in negozio · QR in store
-        </motion.p>
-
         <motion.h1
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}

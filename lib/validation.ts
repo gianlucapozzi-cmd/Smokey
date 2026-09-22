@@ -62,6 +62,7 @@ export type FormDraft = {
   birthDate: string;
   store: StoreId | "";
   interests: ProductInterestId[];
+  interestNote: string;
   privacy: boolean;
   marketing: boolean;
   service: RatingValue | null;
@@ -166,6 +167,7 @@ export function parsePayload(input: unknown): CommunityPayload | { error: string
     };
     feedback?: Partial<CommunityPayload["feedback"]>;
     interests?: unknown;
+    interestNote?: unknown;
   };
 
   const contact = body.contact;
@@ -207,6 +209,8 @@ export function parsePayload(input: unknown): CommunityPayload | { error: string
     return { error: "Seleziona almeno un prodotto di interesse." };
   }
 
+  const interestNote = String(body.interestNote ?? "").trim().slice(0, 500);
+
   const now = new Date().toISOString();
 
   return {
@@ -221,6 +225,7 @@ export function parsePayload(input: unknown): CommunityPayload | { error: string
       store,
     },
     interests,
+    interestNote,
     consents: {
       privacy: {
         accepted: true,

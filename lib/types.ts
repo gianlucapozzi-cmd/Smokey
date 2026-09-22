@@ -20,6 +20,7 @@ export type CommunityPayload = {
     store: StoreId;
   };
   interests: ProductInterestId[];
+  interestNote: string;
   consents: {
     privacy: ConsentRecord;
     marketing: ConsentRecord;

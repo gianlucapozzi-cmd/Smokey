@@ -28,6 +28,7 @@ const INITIAL: FormDraft = {
   birthDate: "",
   store: "",
   interests: [],
+  interestNote: "",
   privacy: false,
   marketing: false,
   service: null,
@@ -97,6 +98,7 @@ export function CommunityForm() {
         store: draft.store as CommunityPayload["contact"]["store"],
       },
       interests: draft.interests,
+      interestNote: draft.interestNote.trim(),
       consents: {
         privacy: {
           accepted: true,
@@ -211,10 +213,6 @@ export function CommunityForm() {
                     onChange={(value) => update("phone", value)}
                   />
                 </div>
-                <p className="mt-2 text-sm text-ink/50">
-                  Il cellulare è obbligatorio. L’email è facoltativa: con
-                  entrambe ti raggiungiamo anche per le promo.
-                </p>
 
                 <div className="mt-4">
                   <Field
@@ -284,6 +282,23 @@ export function CommunityForm() {
                   {show("interests") ? (
                     <p className="mt-2 text-sm text-ember">{errors.interests}</p>
                   ) : null}
+                  <label className="mt-4 block">
+                    <span className="mb-1.5 block text-sm font-medium text-ink">
+                      Altro{" "}
+                      <span className="font-normal text-ink/45">
+                        (facoltativo)
+                      </span>
+                    </span>
+                    <textarea
+                      className="field min-h-[4.5rem] resize-y"
+                      maxLength={500}
+                      placeholder="Un brand, un kit, o altro che ti interessa"
+                      value={draft.interestNote}
+                      onChange={(event) =>
+                        update("interestNote", event.target.value)
+                      }
+                    />
+                  </label>
                 </fieldset>
 
                 <div className="mt-8 border-t border-ink/8 pt-8">
@@ -401,9 +416,6 @@ export function CommunityForm() {
                 >
                   {submitting ? "Un attimo…" : "Entra nel giro"}
                 </button>
-                <p className="mt-3 text-center text-xs text-ink/45">
-                  Il bottone si attiva quando i campi obbligatori sono a posto.
-                </p>
               </form>
             </motion.div>
           )}
