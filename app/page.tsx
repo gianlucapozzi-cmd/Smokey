@@ -2,6 +2,7 @@ import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { Benefits } from "@/components/Benefits";
 import { TwoWays } from "@/components/TwoWays";
+import { ShopCarousel } from "@/components/ShopCarousel";
 import { CommunityForm } from "@/components/CommunityForm";
 import { Footer } from "@/components/Footer";
 
@@ -13,6 +14,7 @@ export default function Home() {
         <Hero />
         <Benefits />
         <TwoWays />
+        <ShopCarousel />
         <CommunityForm />
       </main>
       <Footer />
