@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { ScrollTo } from "./ScrollTo";
 import { StoreCenters } from "./StoreCenters";
 
 export function Hero() {
@@ -70,9 +71,9 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.24 }}
           className="mt-8"
         >
-          <a href="#form" className="btn-ember w-full justify-center sm:w-auto">
+          <ScrollTo id="form" className="btn-ember w-full justify-center sm:w-auto">
             Dicci la tua
-          </a>
+          </ScrollTo>
         </motion.div>
       </div>
     </section>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Fraunces, Mona_Sans } from "next/font/google";
+import { StripHash } from "@/components/ScrollTo";
 import "./globals.css";
 
 const mona = Mona_Sans({
@@ -33,7 +34,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="it"
       className={`${mona.variable} ${fraunces.variable} h-full scroll-smooth antialiased`}
     >
-      <body className="min-h-full bg-cream font-sans text-ink">{children}</body>
+      <body className="min-h-full bg-cream font-sans text-ink">
+        <StripHash />
+        {children}
+      </body>
     </html>
   );
 }
