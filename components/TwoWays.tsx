@@ -2,8 +2,13 @@ import { FadeIn } from "./FadeIn";
 
 export function TwoWays() {
   return (
-    <section className="bg-sand/70 px-5 py-16 sm:px-8 sm:py-24">
-      <div className="mx-auto max-w-5xl">
+    <section className="relative overflow-hidden bg-sand/70 px-5 py-16 sm:px-8 sm:py-24">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0 bg-cover bg-center"
+        style={{ backgroundImage: "url(/two-ways.jpg)", opacity: 0.15 }}
+      />
+      <div className="relative z-10 mx-auto max-w-5xl">
         <FadeIn className="text-center">
           <p className="text-xs font-medium uppercase tracking-[0.18em] text-ember">
             A due vie
