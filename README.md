@@ -15,7 +15,7 @@ npm run dev
 
 Apri [http://localhost:3000](http://localhost:3000).
 
-Senza `N8N_WEBHOOK_URL` l'invio del form viene accettato in modalità demo (solo in development).
+Senza destinazioni configurate l'invio del form viene accettato in modalità demo (solo in development).
 
 ## Variabili d'ambiente
 
@@ -23,20 +23,29 @@ Copia `.env.example` in `.env.local`:
 
 | Variabile | Uso |
 | --- | --- |
-| `N8N_WEBHOOK_URL` | Endpoint webhook n8n (`automations.wolfoncloud.com`) |
-| `N8N_WEBHOOK_TOKEN` | Chiave Relatia/n8n. Viene inviata come `Authorization: Token …` |
+| `GOOGLE_SHEETS_WEBHOOK_URL` | URL dell'app web Apps Script collegata al foglio |
+| `GOOGLE_SHEETS_WEBHOOK_SECRET` | Stesso valore della proprietà `WEBHOOK_SECRET` nello script |
+| `N8N_WEBHOOK_URL` | (opzionale) Endpoint webhook n8n → Relatia |
+| `N8N_WEBHOOK_TOKEN` | (opzionale) Chiave Relatia/n8n, inviata come `Authorization: Token …` |
 
-Non hardcodare URL o token nel codice.
+Non hardcodare URL o token nel codice. In produzione serve almeno il foglio Google **oppure** n8n.
 
-## Form → n8n → Relatia
+## Form → Foglio Google
 
-Il body completo viene costruito in `/api/register` (niente mapping fragile lato client). In n8n:
+Ogni invio del form aggiunge una riga al foglio. Setup una tantum:
 
-- workflow **Active** (altrimenti 404 “webhook not registered”)
-- Authorization impostata a mano
-- mapping campi verso contatto/pipeline Relatia in un **Code node**
+1. Crea un Google Sheet (es. `SOSmoke Community`).
+2. **Estensioni → Apps Script**, cancella il codice di default e incolla `google-apps-script/Code.gs`.
+3. Salva. Poi **Impostazioni progetto → Proprietà script** e aggiungi `WEBHOOK_SECRET` (una stringa a caso, lunga).
+4. **Distribuisci → Nuova distribuzione → Tipo: App web**
+   - Esegui come: **Io**
+   - Chi ha accesso: **Chiunque**
+5. Copia l'URL (`…/exec`) in `GOOGLE_SHEETS_WEBHOOK_URL` su Vercel, e lo stesso secret in `GOOGLE_SHEETS_WEBHOOK_SECRET`.
+6. Dopo ogni modifica allo script: **Distribuisci → Gestisci le distribuzioni → icona matita → Nuova versione**.
 
-Vengono salvati timestamp + testo dei consensi privacy e marketing al momento dell'invio.
+La scheda **Iscrizioni** (intestazioni incluse) viene creata al primo invio.
+
+n8n/Relatia resta opzionale: se `N8N_WEBHOOK_URL` è impostato, lo stesso payload parte anche lì.
 
 ## Deploy
 

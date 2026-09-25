@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { sendToN8n } from "@/lib/n8n";
+import { sendToGoogleSheet } from "@/lib/sheet";
 import { parsePayload } from "@/lib/validation";
 
 export async function POST(request: Request) {
@@ -17,12 +19,14 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: parsed.error }, { status: 400 });
   }
 
-  const webhook = process.env.N8N_WEBHOOK_URL;
-  const token = process.env.N8N_WEBHOOK_TOKEN;
+  const sheetsUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL;
+  const n8nUrl = process.env.N8N_WEBHOOK_URL;
 
-  if (!webhook) {
+  if (!sheetsUrl && !n8nUrl) {
     if (process.env.NODE_ENV !== "production") {
-      console.warn("[register] N8N_WEBHOOK_URL mancante — accettato in demo");
+      console.warn(
+        "[register] nessuna destinazione configurata — accettato in demo",
+      );
       return NextResponse.json({ ok: true, demo: true });
     }
     return NextResponse.json(
@@ -32,34 +36,13 @@ export async function POST(request: Request) {
   }
 
   try {
-    const headers: Record<string, string> = {
-      "Content-Type": "application/json",
-    };
-    if (token) {
-      headers.Authorization = token.startsWith("Token ")
-        ? token
-        : `Token ${token}`;
-    }
-
-    const response = await fetch(webhook, {
-      method: "POST",
-      headers,
-      body: JSON.stringify(parsed),
-      signal: AbortSignal.timeout(15000),
-    });
-
-    if (!response.ok) {
-      const detail = await response.text().catch(() => "");
-      console.error("[register] webhook", response.status, detail);
-      return NextResponse.json(
-        { ok: false, error: "Invio non riuscito." },
-        { status: 502 },
-      );
-    }
-
+    await Promise.all([
+      sheetsUrl ? sendToGoogleSheet(parsed) : Promise.resolve(),
+      n8nUrl ? sendToN8n(parsed) : Promise.resolve(),
+    ]);
     return NextResponse.json({ ok: true });
   } catch (error) {
-    console.error("[register] webhook error", error);
+    console.error("[register] forward error", error);
     return NextResponse.json(
       { ok: false, error: "Invio non riuscito." },
       { status: 502 },
