@@ -69,28 +69,36 @@ export function payloadToSheetRow(payload: CommunityPayload): string[] {
   ];
 }
 
-async function postJson(url: string, body: unknown): Promise<Response> {
+async function postJson(url: string, body: unknown): Promise<void> {
   const payload = JSON.stringify(body);
-  const headers = { "Content-Type": "application/json" };
-  const options: RequestInit = {
+  const first = await fetch(url, {
     method: "POST",
-    headers,
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
     body: payload,
     redirect: "manual",
-    signal: AbortSignal.timeout(15000),
-  };
+    signal: AbortSignal.timeout(20000),
+  });
 
-  let response = await fetch(url, options);
-  const location = response.headers.get("location");
-  if (location && response.status >= 300 && response.status < 400) {
-    response = await fetch(location, {
-      method: "POST",
-      headers,
-      body: payload,
-      signal: AbortSignal.timeout(15000),
-    });
+  const location = first.headers.get("location");
+  const response =
+    location && first.status >= 300 && first.status < 400
+      ? await fetch(new URL(location, url), {
+          method: "GET",
+          signal: AbortSignal.timeout(20000),
+        })
+      : first;
+
+  const text = await response.text();
+  let parsed: { ok?: boolean; error?: string } = {};
+  try {
+    parsed = JSON.parse(text) as { ok?: boolean; error?: string };
+  } catch {
+    throw new Error(`Google Sheets ${response.status} ${text.slice(0, 180)}`);
   }
-  return response;
+
+  if (!response.ok || parsed.ok === false) {
+    throw new Error(parsed.error || `Google Sheets ${response.status}`);
+  }
 }
 
 export async function sendToGoogleSheet(
@@ -99,14 +107,9 @@ export async function sendToGoogleSheet(
   const url = process.env.GOOGLE_SHEETS_WEBHOOK_URL;
   if (!url) return;
 
-  const response = await postJson(url, {
+  await postJson(url, {
     secret: process.env.GOOGLE_SHEETS_WEBHOOK_SECRET ?? "",
     headers: SHEET_HEADERS,
     values: payloadToSheetRow(payload),
   });
-
-  if (!response.ok) {
-    const detail = await response.text().catch(() => "");
-    throw new Error(`Google Sheets ${response.status} ${detail}`);
-  }
 }
