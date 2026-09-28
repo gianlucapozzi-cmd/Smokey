@@ -25,8 +25,7 @@ Copia `.env.example` in `.env.local`:
 | --- | --- |
 | `GOOGLE_SHEETS_WEBHOOK_URL` | URL dell'app web Apps Script collegata al foglio |
 | `GOOGLE_SHEETS_WEBHOOK_SECRET` | Stesso valore della proprietà `WEBHOOK_SECRET` nello script |
-| `N8N_WEBHOOK_URL` | (opzionale) Endpoint webhook n8n → Relatia |
-| `N8N_WEBHOOK_TOKEN` | (opzionale) Chiave Relatia/n8n, inviata come `Authorization: Token …` |
+| `NOTIFY_EMAIL` | (opzionale) Destinatario della notifica, default `info@sosmoke.it` |
 
 Non hardcodare URL o token nel codice. In produzione serve almeno il foglio Google **oppure** n8n.
 
@@ -45,7 +44,13 @@ Ogni invio del form aggiunge una riga al foglio. Setup una tantum:
 
 La scheda **Iscrizioni** (intestazioni incluse) viene creata al primo invio.
 
-n8n/Relatia resta opzionale: se `N8N_WEBHOOK_URL` è impostato, lo stesso payload parte anche lì.
+n8n/Relatia non è usato.
+
+## Form → Email (FormSubmit)
+
+Ogni iscrizione manda anche una mail a **info@sosmoke.it**, come sul sito di Federica Vendruscolo. Niente account né API key.
+
+Al **primo invio** FormSubmit manda a `info@sosmoke.it` una mail di attivazione: bisogna cliccare il link (controllare anche spam). Da quel momento le iscrizioni arrivano in posta, in tabella, con gli stessi campi del foglio.
 
 ## Deploy
 
