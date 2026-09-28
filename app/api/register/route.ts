@@ -36,13 +36,17 @@ export async function POST(request: Request) {
   }
 
   try {
-    await Promise.all([
-      sheetsUrl ? sendToGoogleSheet(parsed) : Promise.resolve(),
-      n8nUrl ? sendToN8n(parsed) : Promise.resolve(),
-    ]);
+    if (sheetsUrl) {
+      await sendToGoogleSheet(parsed);
+    }
+    if (n8nUrl) {
+      await sendToN8n(parsed).catch((error) => {
+        console.error("[register] n8n error", error);
+      });
+    }
     return NextResponse.json({ ok: true });
   } catch (error) {
-    console.error("[register] forward error", error);
+    console.error("[register] sheets error", error);
     return NextResponse.json(
       { ok: false, error: "Invio non riuscito." },
       { status: 502 },

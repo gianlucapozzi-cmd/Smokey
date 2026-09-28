@@ -1,15 +1,17 @@
 /**
- * Incolla questo file in Estensioni → Apps Script del foglio Google.
- * Poi: Distribuisci → Nuova distribuzione → App web
- *   - Esegui come: Io
- *   - Chi ha accesso: Chiunque
- * Copia l'URL e mettilo in GOOGLE_SHEETS_WEBHOOK_URL su Vercel.
+ * Incolla in Apps Script, salva, poi:
+ * Distribuisci → Gestisci le distribuzioni → matita → Versione: Nuova → Distribuisci
  *
- * Opzionale ma consigliato: Impostazioni progetto → Proprietà script
- *   WEBHOOK_SECRET = lo stesso valore di GOOGLE_SHEETS_WEBHOOK_SECRET
+ * Proprietà script: WEBHOOK_SECRET = lo stesso valore di
+ * GOOGLE_SHEETS_WEBHOOK_SECRET su Vercel
  */
 
-var SHEET_NAME = "Iscrizioni";
+var SPREADSHEET_ID = "1VpEjdqVmP532vUDmqhW3ySsfPBPtFyxvuX3O692K78Y";
+var SHEET_NAME = "Invii community";
+
+function doGet() {
+  return json_({ ok: true });
+}
 
 function doPost(e) {
   try {
@@ -28,12 +30,7 @@ function doPost(e) {
       return json_({ ok: false, error: "payload incompleto" });
     }
 
-    if (sheet.getLastRow() === 0) {
-      sheet.appendRow(headers);
-      sheet.getRange(1, 1, 1, headers.length).setFontWeight("bold");
-      sheet.setFrozenRows(1);
-    }
-
+    ensureHeaders_(sheet, headers);
     sheet.appendRow(values);
     return json_({ ok: true });
   } catch (error) {
@@ -42,12 +39,22 @@ function doPost(e) {
 }
 
 function getOrCreateSheet_() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
   var sheet = ss.getSheetByName(SHEET_NAME);
   if (!sheet) {
     sheet = ss.insertSheet(SHEET_NAME);
   }
   return sheet;
+}
+
+function ensureHeaders_(sheet, headers) {
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(headers);
+  } else {
+    sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+  }
+  sheet.getRange(1, 1, 1, headers.length).setFontWeight("bold");
+  sheet.setFrozenRows(1);
 }
 
 function json_(body) {
