@@ -35,9 +35,7 @@ export function payloadToSheetRow(payload: CommunityPayload): string[] {
     )
     .join(", ");
 
-  const shop = store
-    ? `${store.city} — ${store.cap} ${store.address}`
-    : payload.contact.store;
+  const shop = store?.city ?? payload.contact.store;
 
   return [
     payload.contact.firstName,
