@@ -15,6 +15,7 @@ export const SHEET_HEADERS = [
   "Competenza",
   "Cosa possiamo migliorare?",
   "Quale prodotto o brand vorresti che portassimo?",
+  "Consenso marketing",
   "Data invio",
 ] as const;
 
@@ -51,6 +52,7 @@ export function payloadToSheetRow(payload: CommunityPayload): string[] {
     payload.feedback.expertise?.toString() ?? "",
     payload.feedback.improvement,
     payload.feedback.productRequest,
+    payload.consents.marketing.accepted ? "Sì" : "No",
     formatRome(payload.submittedAt),
   ];
 }
