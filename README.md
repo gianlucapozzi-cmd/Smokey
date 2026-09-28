@@ -48,9 +48,9 @@ n8n/Relatia non è usato.
 
 ## Form → Email (FormSubmit)
 
-Ogni iscrizione manda anche una mail a **info@sosmoke.it**, come sul sito di Federica Vendruscolo. Niente account né API key.
+Ogni iscrizione manda anche una mail a **info@sosmoke.it**, come sul sito di Federica Vendruscolo. Niente account né API key. L'invio parte dal browser (FormSubmit blocca i server Vercel).
 
-Al **primo invio** FormSubmit manda a `info@sosmoke.it` una mail di attivazione: bisogna cliccare il link (controllare anche spam). Da quel momento le iscrizioni arrivano in posta, in tabella, con gli stessi campi del foglio.
+Al **primo invio** FormSubmit manda a `info@sosmoke.it` una mail di attivazione: bisogna cliccare il link (controllare anche spam). Da quel momento le iscrizioni arrivano in posta.
 
 ## Deploy
 

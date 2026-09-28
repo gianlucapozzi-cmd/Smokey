@@ -9,6 +9,7 @@ import {
   PRODUCT_INTERESTS,
   type ProductInterestId,
 } from "@/lib/constants";
+import { FORMSUBMIT_URL, buildFormSubmitBody } from "@/lib/email";
 import type { CommunityPayload, RatingValue } from "@/lib/types";
 import {
   isDraftValid,
@@ -137,6 +138,14 @@ export function CommunityForm() {
       if (!response.ok || !data.ok) {
         throw new Error(data.error || "Invio non riuscito.");
       }
+      await fetch(FORMSUBMIT_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(buildFormSubmitBody(payload)),
+      }).catch(() => undefined);
       setDone(true);
     } catch {
       setSubmitError(

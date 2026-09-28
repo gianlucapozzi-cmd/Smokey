@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { sendNotificationEmail } from "@/lib/email";
 import { sendToN8n } from "@/lib/n8n";
 import { sendToGoogleSheet } from "@/lib/sheet";
 import { parsePayload } from "@/lib/validation";
@@ -45,9 +44,6 @@ export async function POST(request: Request) {
         console.error("[register] n8n error", error);
       });
     }
-    await sendNotificationEmail(parsed).catch((error) => {
-      console.error("[register] email error", error);
-    });
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("[register] sheets error", error);
