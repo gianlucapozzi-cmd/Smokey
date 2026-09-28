@@ -2,25 +2,20 @@ import { PRODUCT_INTERESTS, STORE_DETAILS } from "./constants";
 import type { CommunityPayload } from "./types";
 
 export const SHEET_HEADERS = [
-  "Data invio",
   "Nome",
   "Cognome",
+  "Telefono",
   "Email",
-  "Cellulare",
   "Data di nascita",
-  "Negozio",
-  "Indirizzo",
-  "Interessi",
-  "Altro interesse",
-  "Privacy",
-  "Timestamp privacy",
-  "Marketing",
-  "Timestamp marketing",
+  "Negozio di riferimento",
+  "Prodotti di interesse",
+  "Altro",
   "Servizio",
   "Accoglienza",
   "Competenza",
-  "Cosa migliorare",
-  "Prodotto richiesto",
+  "Cosa possiamo migliorare?",
+  "Quale prodotto o brand vorresti che portassimo?",
+  "Data invio",
 ] as const;
 
 function formatRome(iso: string): string {
@@ -32,10 +27,6 @@ function formatRome(iso: string): string {
   }).format(new Date(iso));
 }
 
-function yesNo(value: boolean): string {
-  return value ? "Sì" : "No";
-}
-
 export function payloadToSheetRow(payload: CommunityPayload): string[] {
   const store = STORE_DETAILS.find((item) => item.id === payload.contact.store);
   const interests = payload.interests
@@ -44,28 +35,25 @@ export function payloadToSheetRow(payload: CommunityPayload): string[] {
     )
     .join(", ");
 
+  const shop = store
+    ? `${store.city} — ${store.cap} ${store.address}`
+    : payload.contact.store;
+
   return [
-    formatRome(payload.submittedAt),
     payload.contact.firstName,
     payload.contact.lastName,
-    payload.contact.email,
     payload.contact.phone,
+    payload.contact.email,
     payload.contact.birthDate,
-    store?.city ?? payload.contact.store,
-    store ? `${store.cap} - ${store.address}` : "",
+    shop,
     interests,
     payload.interestNote,
-    yesNo(payload.consents.privacy.accepted),
-    formatRome(payload.consents.privacy.timestamp),
-    yesNo(payload.consents.marketing.accepted),
-    payload.consents.marketing.accepted
-      ? formatRome(payload.consents.marketing.timestamp)
-      : "",
     payload.feedback.service?.toString() ?? "",
     payload.feedback.welcome?.toString() ?? "",
     payload.feedback.expertise?.toString() ?? "",
     payload.feedback.improvement,
     payload.feedback.productRequest,
+    formatRome(payload.submittedAt),
   ];
 }
 
