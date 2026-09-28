@@ -81,7 +81,10 @@ export type FieldErrors = Partial<
     | "birthDate"
     | "store"
     | "interests"
-    | "privacy",
+    | "privacy"
+    | "service"
+    | "welcome"
+    | "expertise",
     string
   >
 >;
@@ -128,6 +131,16 @@ export function validateDraft(draft: FormDraft): FieldErrors {
 
   if (!draft.privacy) {
     errors.privacy = "Per iscriverti serve il consenso privacy.";
+  }
+
+  if (draft.service === null) {
+    errors.service = "Dai un voto al servizio.";
+  }
+  if (draft.welcome === null) {
+    errors.welcome = "Dai un voto all’accoglienza.";
+  }
+  if (draft.expertise === null) {
+    errors.expertise = "Dai un voto alla competenza.";
   }
 
   return errors;
@@ -209,6 +222,14 @@ export function parsePayload(input: unknown): CommunityPayload | { error: string
     return { error: "Seleziona almeno un prodotto di interesse." };
   }
 
+  if (
+    !isRating(body.feedback?.service) ||
+    !isRating(body.feedback?.welcome) ||
+    !isRating(body.feedback?.expertise)
+  ) {
+    return { error: "Valuta servizio, accoglienza e competenza." };
+  }
+
   const interestNote = String(body.interestNote ?? "").trim().slice(0, 500);
 
   const now = new Date().toISOString();
@@ -239,11 +260,9 @@ export function parsePayload(input: unknown): CommunityPayload | { error: string
       },
     },
     feedback: {
-      service: isRating(body.feedback?.service) ? body.feedback.service : null,
-      welcome: isRating(body.feedback?.welcome) ? body.feedback.welcome : null,
-      expertise: isRating(body.feedback?.expertise)
-        ? body.feedback.expertise
-        : null,
+      service: body.feedback.service,
+      welcome: body.feedback.welcome,
+      expertise: body.feedback.expertise,
       improvement: String(body.feedback?.improvement ?? "").trim().slice(0, 1000),
       productRequest: String(body.feedback?.productRequest ?? "")
         .trim()

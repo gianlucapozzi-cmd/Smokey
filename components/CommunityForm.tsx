@@ -57,7 +57,13 @@ export function CommunityForm() {
     });
   }, [done]);
   function show(key: keyof typeof errors): string | undefined {
-    if (key === "privacy" || key === "interests") {
+    if (
+      key === "privacy" ||
+      key === "interests" ||
+      key === "service" ||
+      key === "welcome" ||
+      key === "expertise"
+    ) {
       if (!touched) return undefined;
       return errors[key];
     }
@@ -313,21 +319,27 @@ export function CommunityForm() {
                   <div className="mt-5 grid gap-5">
                     <RatingScale
                       legend="Servizio"
+                      required
                       value={draft.service}
+                      error={show("service")}
                       onChange={(value) =>
                         update("service", value as RatingValue | null)
                       }
                     />
                     <RatingScale
                       legend="Accoglienza"
+                      required
                       value={draft.welcome}
+                      error={show("welcome")}
                       onChange={(value) =>
                         update("welcome", value as RatingValue | null)
                       }
                     />
                     <RatingScale
                       legend="Competenza"
+                      required
                       value={draft.expertise}
+                      error={show("expertise")}
                       onChange={(value) =>
                         update("expertise", value as RatingValue | null)
                       }
